@@ -12,21 +12,45 @@ import java.util.List;
 public class AppUserController {
     private final AppUserService appUserService;
 
+    /**
+     * Get a user's details by user id
+     *
+     * @param userId id of user to be searched
+     * @return user object
+     */
     @GetMapping
     public AppUser getUser(@RequestParam Long userId) {
         return appUserService.getUser(userId);
     }
 
+    /**
+     * Register a new user
+     * @param appUser user object containing registration information of the new user
+     */
     @PostMapping
     public void registerNewUser(@RequestBody AppUser appUser) {
         appUserService.registerNewUser(appUser);
     }
 
+    /**
+     * Delete a user by user id
+     *
+     * @param userId id of the user to be deleted
+     */
     @DeleteMapping
     public void deleteUser(@RequestParam Long userId) {
         appUserService.deleteUser(userId);
     }
 
+    /**
+     * Update a user's information by user id
+     *
+     * @param userId id of the user to be updated
+     * @param displayName updated display name
+     * @param username updated username
+     * @param password updated password
+     * @param birthDate updated birthdate
+     */
     @PutMapping
     public void updateUser(@RequestParam Long userId,
                            @RequestParam(required = false) String displayName,
@@ -36,6 +60,13 @@ public class AppUserController {
         appUserService.updateUser(userId, displayName, username, password, birthDate);
     }
 
+    /**
+     * Get a list of users that are friends to a user by user id.
+     * The list is sorted by their last interaction time.
+     *
+     * @param userId id of the user to be searched
+     * @return a list of users
+     */
     @GetMapping(path = "friends")
     public List<AppUser> getFriends(@RequestParam Long userId) {
         return appUserService.getFriends(userId);
