@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -78,9 +79,17 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    public List<AppUser> getFriends(Long userId) {
+    public List<AppUserSummary> getFriends(Long userId) {
         AppUser appUser = getUser(userId);
-        return appUser.getFriends();
+        return appUser
+                .getFriends()
+                .stream()
+                .map(f -> new AppUserSummary(
+                        f.getId(),
+                        f.getFirstName(),
+                        f.getLastName(),
+                        f.getDisplayName()))
+                .collect(Collectors.toList());
     }
 
     public void addFriend(Long userId, Long friendUserId) {

@@ -24,16 +24,6 @@ public class AppUserController {
     }
 
     /**
-     * Register a new user
-     *
-     * @param appUser user object containing registration information of the new user
-     */
-    @PostMapping
-    public void registerNewUser(@RequestBody AppUser appUser) {
-        appUserService.registerNewUser(appUser);
-    }
-
-    /**
      * Delete a user by user id
      *
      * @param userId id of the user to be deleted
@@ -67,7 +57,7 @@ public class AppUserController {
      * @return a list of users
      */
     @GetMapping(path = "friends")
-    public List<AppUser> getFriends(@RequestParam Long userId) {
+    public List<AppUserSummary> getFriends(@RequestParam Long userId) {
         return appUserService.getFriends(userId);
     }
 
