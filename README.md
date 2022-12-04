@@ -9,15 +9,29 @@ Backend server for a chat app.
 - https://github.com/Zheng-August/html
 - https://github.com/LJC0414/GhostChat
 
+## Configuring properties
+
+Some important configurations are listed below.
+
+Edit `resources/application.properties` to change these properties.
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/chat
+spring.datasource.username=chatuser
+spring.datasource.password=1234
+server.port=80
+springdoc.swagger-ui.path=/api
+springdoc.api-docs.enabled=true
+springdoc.swagger-ui.enabled=true
+```
+
 ## Prerequisites
 
-- MySQL community server
+- MySQL server
 
 - JRE 17
 
-## Setup and configuration
-
-### Database
+### Configuring database
 
 Login to MySQL as root
 
@@ -27,7 +41,7 @@ CREATE USER 'chatuser'@'localhost' IDENTIFIED BY '1234';
 GRANT ALL ON chat.* TO 'chatuser'@'localhost';
 ```
 
-### Run
+## Running the application
 
 cd into project root
 
@@ -35,9 +49,7 @@ cd into project root
 ./mvnw spring-boot:run
 ```
 
-It could take a while when you run it for the first time, since it will resolve and download dependencies.
-
-
+It can take a while when you run it for the first time, since maven would resolve and download dependencies.
 
 Alternatively, run the program using jar file
 
@@ -47,7 +59,7 @@ java -jar chat-server-xxx.jar --server.port=<port-number>
 
 where `port-number` equals to the same port of the frontend webpage.
 
-## Build from source
+## Building from source
 
 ```shell
 ./mvnw clean install
