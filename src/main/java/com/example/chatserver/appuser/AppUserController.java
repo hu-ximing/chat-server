@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/user")
+@RequestMapping(path = "/api/v1/user")
 @AllArgsConstructor
 public class AppUserController {
+
     private final AppUserService appUserService;
 
     /**

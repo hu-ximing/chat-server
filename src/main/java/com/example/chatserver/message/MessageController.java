@@ -7,9 +7,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/message")
+@RequestMapping(path = "/api/v1/message")
 @AllArgsConstructor
 public class MessageController {
+
     private final MessageService messageService;
 
     @GetMapping
@@ -24,9 +25,10 @@ public class MessageController {
         return messageService.countUnreadMessages(currentUserId, friendUserId);
     }
 
-    @PostMapping(path = "send")
-    public void sendMessage(@RequestBody Message message) {
-        messageService.sendMessage(message);
+    @PostMapping(path = "{userId}")
+    public void sendMessage(@PathVariable("userId") Long senderId,
+                            @RequestBody MessageSendRequest request) {
+        messageService.sendMessage(request);
     }
 
     @PostMapping(path = "read")

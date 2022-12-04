@@ -3,7 +3,7 @@ package com.example.chatserver;
 import com.example.chatserver.appuser.AppUser;
 import com.example.chatserver.appuser.AppUserRepository;
 import com.example.chatserver.appuser.AppUserService;
-import com.example.chatserver.message.Message;
+import com.example.chatserver.message.MessageSendRequest;
 import com.example.chatserver.message.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -53,11 +53,11 @@ public class ChatServerApplication {
             ));
             appUserService.addFriend(tom.getId(), babara.getId());
             appUserService.addFriend(tom.getId(), elka.getId());
-            messageService.sendMessage(new Message(
-                    tom, babara, null, "first message to babara"
+            messageService.sendMessage(new MessageSendRequest(
+                    tom.getId(), babara.getId(), "first message to babara"
             ));
-            messageService.sendMessage(new Message(
-                    babara, tom, null, "second message to tom"
+            messageService.sendMessage(new MessageSendRequest(
+                    tom.getId(), babara.getId(), "second message to tom"
             ));
         };
     }
