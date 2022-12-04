@@ -17,7 +17,7 @@ public class RegistrationService {
         if (!isValidEmail) {
             throw new RuntimeException("email is not valid: " + request.username());
         }
-        appUserService.registerNewUser(
+        return appUserService.registerNewUser(
                 new AppUser(
                         request.username(),
                         request.password(),
@@ -26,6 +26,5 @@ public class RegistrationService {
                         request.displayName()
                 )
         );
-        return "registration succeed";
     }
 }

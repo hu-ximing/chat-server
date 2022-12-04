@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,12 +35,16 @@ public class AppUserService implements UserDetailsService {
         );
     }
 
-    public void registerNewUser(AppUser appUser) {
+    public String registerNewUser(AppUser appUser) {
         Optional<AppUser> userOptional = appUserRepository.findByUsername(appUser.getUsername());
         if (userOptional.isPresent()) {
             throw new UsernameTakenException(appUser.getUsername());
         }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+        appUser.setPassword(encodedPassword);
         appUserRepository.save(appUser);
+        return "registration succeed";
     }
 
     public void deleteUser(Long userId) {
