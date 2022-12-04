@@ -48,16 +48,16 @@ public class ChatServerApplication {
                     "C",
                     "tom"
             ));
-            AppUser babara = appUserService.getUser(1L);
-            AppUser elka = appUserService.getUser(2L);
-            AppUser tom = appUserService.getUser(3L);
+            AppUser babara = appUserService.getUserById(1L);
+            AppUser elka = appUserService.getUserById(2L);
+            AppUser tom = appUserService.getUserById(3L);
             appUserService.addFriend(babara.getId(), tom.getId());
             appUserService.addFriend(elka.getId(), tom.getId());
-            messageService.sendMessage(new MessageSendRequest(
-                    tom.getId(), babara.getId(), "first message to babara"
+            messageService.createMessage(tom, new MessageSendRequest(
+                    babara.getId(), "first message to babara"
             ));
-            messageService.sendMessage(new MessageSendRequest(
-                    babara.getId(), tom.getId(), "second message to tom"
+            messageService.createMessage(babara, new MessageSendRequest(
+                    tom.getId(), "second message to tom"
             ));
         };
     }

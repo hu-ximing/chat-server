@@ -16,15 +16,15 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final AppUserService appUserService;
 
-    public List<Message> getMessages(Long currentUserId, Long friendUserId) {
-        AppUser sender = appUserService.getUser(currentUserId);
-        AppUser receiver = appUserService.getUser(friendUserId);
+    public List<Message> getMessagesWith(Long friendUserId) {
+        AppUser user1 = appUserService.getLoggedInAppUser();
+        AppUser user2 = appUserService.getUserById(friendUserId);
         return messageRepository
-                .findByAppUsersOrderByTimestamp(sender, receiver);
+                .findByAppUsersOrderByTimestamp(user1, user2);
     }
 
-    public List<MessageSummary> getMessageSummaries(Long currentUserId, Long friendUserId) {
-        return getMessages(currentUserId, friendUserId)
+    public List<MessageSummary> getMessageSummariesWith(Long friendUserId) {
+        return getMessagesWith(friendUserId)
                 .stream()
                 .map(m -> new MessageSummary(m.getId(),
                         m.getSender().getId(),
@@ -35,25 +35,25 @@ public class MessageService {
                 .collect(Collectors.toList());
     }
 
-    public Long countUnreadMessages(Long currentUserId, Long friendUserId) {
-        AppUser current = appUserService.getUser(currentUserId);
-        AppUser friend = appUserService.getUser(friendUserId);
+    public Long countUnreadMessages(Long friendUserId) {
+        AppUser current = appUserService.getLoggedInAppUser();
+        AppUser friend = appUserService.getUserById(friendUserId);
         return messageRepository
                 .countBySenderAndReceiverAndIsReadIsFalse(friend, current);
     }
 
     @Transactional
-    public void readMessage(Long currentUserId, Long friendUserId) {
-        AppUser current = appUserService.getUser(currentUserId);
-        AppUser friend = appUserService.getUser(friendUserId);
+    public void readMessage(Long friendUserId) {
+        AppUser current = appUserService.getLoggedInAppUser();
+        AppUser friend = appUserService.getUserById(friendUserId);
         messageRepository
                 .setIsReadToTrueBySenderAndReceiver(friend, current);
     }
 
     @Transactional
-    public void sendMessage(MessageSendRequest request) {
-        AppUser sender = appUserService.getUser(request.senderId());
-        AppUser receiver = appUserService.getUser(request.receiverId());
+    public void sendMessageTo(MessageSendRequest request) {
+        AppUser sender = appUserService.getLoggedInAppUser();
+        AppUser receiver = appUserService.getUserById(request.receiverId());
         Message message = new Message(
                 sender,
                 receiver,
@@ -64,8 +64,21 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    public LocalDateTime getLastInteractionTime(Long currentUserId, Long friendUserId) {
-        List<Message> messages = getMessages(currentUserId, friendUserId);
+    @Transactional
+    public void createMessage(AppUser sender, MessageSendRequest request) {
+        AppUser receiver = appUserService.getUserById(request.receiverId());
+        Message message = new Message(
+                sender,
+                receiver,
+                LocalDateTime.now(),
+                request.content(),
+                false
+        );
+        messageRepository.save(message);
+    }
+
+    public LocalDateTime getLastInteractionTime(Long friendUserId) {
+        List<Message> messages = getMessagesWith(friendUserId);
         return messages.get(messages.size() - 1).getTimestamp();
     }
 }

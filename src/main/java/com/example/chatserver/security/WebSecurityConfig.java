@@ -19,6 +19,8 @@ public class WebSecurityConfig {
                         .antMatchers("/api/v*/registration/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .httpBasic()
+                .and()
                 .formLogin();
         return http.build();
     }

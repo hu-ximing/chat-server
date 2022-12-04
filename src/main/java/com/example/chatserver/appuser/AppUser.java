@@ -34,6 +34,7 @@ public class AppUser implements UserDetails {
     private String username;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column()
