@@ -3,7 +3,6 @@ package com.example.chatserver.appuser;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,6 +24,7 @@ public class AppUserController {
 
     /**
      * Register a new user
+     *
      * @param appUser user object containing registration information of the new user
      */
     @PostMapping
@@ -37,27 +37,25 @@ public class AppUserController {
      *
      * @param userId id of the user to be deleted
      */
-    @DeleteMapping
-    public void deleteUser(@RequestParam Long userId) {
+    @DeleteMapping(path = "{userId}")
+    public void deleteUser(@PathVariable("userId") Long userId) {
         appUserService.deleteUser(userId);
     }
 
     /**
      * Update a user's information by user id
      *
-     * @param userId id of the user to be updated
+     * @param userId      id of the user to be updated
      * @param displayName updated display name
-     * @param username updated username
-     * @param password updated password
-     * @param birthDate updated birthdate
+     * @param username    updated username
+     * @param password    updated password
      */
-    @PutMapping
-    public void updateUser(@RequestParam Long userId,
+    @PutMapping(path = "{userId}")
+    public void updateUser(@PathVariable("userId") Long userId,
                            @RequestParam(required = false) String displayName,
                            @RequestParam(required = false) String username,
-                           @RequestParam(required = false) String password,
-                           @RequestParam(required = false) LocalDate birthDate) {
-        appUserService.updateUser(userId, displayName, username, password, birthDate);
+                           @RequestParam(required = false) String password) {
+        appUserService.updateUser(userId, displayName, username, password);
     }
 
     /**

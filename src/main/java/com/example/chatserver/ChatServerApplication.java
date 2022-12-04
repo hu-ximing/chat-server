@@ -11,7 +11,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
@@ -28,49 +27,37 @@ public class ChatServerApplication {
     public CommandLineRunner commandLineRunner(AppUserRepository appUserRepository) {
         return args -> {
             AppUser babara = new AppUser(
-                    "Babara",
                     "babara@example.com",
                     "123",
-                    LocalDate.of(1986, 3, 28));
-            AppUser ines = new AppUser(
-                    "Ines",
-                    "ines@example.com",
+                    "Babara",
+                    "MacCaffrey",
+                    "Babara"
+            );
+            AppUser elka = new AppUser(
+                    "elka@example.com",
                     "123",
-                    LocalDate.of(1986, 4, 13));
-            AppUser freddi = new AppUser(
-                    "Freddi",
-                    "freddi@example.com",
-                    "123",
-                    LocalDate.of(1985, 2, 7));
-            AppUser ambur = new AppUser(
-                    "Ambur",
-                    "ambur@example.com",
-                    "123",
-                    LocalDate.of(1974, 4, 14));
-            AppUser clemmie = new AppUser(
-                    "Clemmie",
-                    "clemmie@example.com",
-                    "123",
-                    LocalDate.of(1973, 11, 7));
+                    "Elka",
+                    "Twiddell",
+                    "elkaaa"
+            );
             AppUser tom = new AppUser(
-                    "Tom",
                     "tom@example.com",
                     "123",
-                    LocalDate.of(1991, 9, 4));
+                    "Tom",
+                    "C",
+                    "tom"
+            );
 
             appUserRepository.saveAll(List.of(
-                    babara, ines, freddi, ambur, clemmie, tom
+                    babara, elka, tom
             ));
             appUserService.addFriend(tom.getId(), babara.getId());
-            appUserService.addFriend(tom.getId(), ines.getId());
-            appUserService.addFriend(tom.getId(), freddi.getId());
-            appUserService.addFriend(tom.getId(), ambur.getId());
-            appUserService.addFriend(tom.getId(), clemmie.getId());
+            appUserService.addFriend(tom.getId(), elka.getId());
             messageService.sendMessage(new Message(
-                    tom, babara, null, "hello, babara"
+                    tom, babara, null, "first message to babara"
             ));
             messageService.sendMessage(new Message(
-                    babara, tom, null, "hello, tom"
+                    babara, tom, null, "second message to tom"
             ));
         };
     }

@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,13 +20,8 @@ public class MessageService {
     public List<Message> getMessages(Long currentUserId, Long friendUserId) {
         AppUser sender = appUserService.getUser(currentUserId);
         AppUser receiver = appUserService.getUser(friendUserId);
-        List<Message> messages = new ArrayList<>();
-        messages.addAll(messageRepository
-                .findMessagesBySenderAndReceiverOrderByTimestamp(sender, receiver));
-        messages.addAll(messageRepository
-                .findMessagesBySenderAndReceiverOrderByTimestamp(receiver, sender));
-        Collections.sort(messages);
-        return messages;
+        return messageRepository
+                .findByAppUsersOrderByTimestamp(sender, receiver);
     }
 
     public List<MessageSummary> getMessageSummaries(Long currentUserId, Long friendUserId) {

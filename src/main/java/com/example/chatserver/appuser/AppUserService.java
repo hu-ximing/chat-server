@@ -1,10 +1,14 @@
 package com.example.chatserver.appuser;
 
+import com.example.chatserver.appuser.exception.AppUserNotFoundException;
+import com.example.chatserver.appuser.exception.UsernameTakenException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,8 +16,16 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Transactional
-public class AppUserService {
+public class AppUserService implements UserDetailsService {
+
     private final AppUserRepository appUserRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "user with username " + username + " not found"));
+    }
 
     public AppUser getUser(Long userId) {
         return appUserRepository.findById(userId).orElseThrow(
@@ -39,8 +51,7 @@ public class AppUserService {
     public void updateUser(Long userId,
                            String displayName,
                            String username,
-                           String password,
-                           LocalDate birthDate) {
+                           String password) {
         AppUser appUser = getUser(userId);
         if (displayName != null &&
                 displayName.length() > 0 &&
@@ -58,9 +69,6 @@ public class AppUserService {
         if (password != null &&
                 password.length() > 0) {
             appUser.setPassword(password);
-        }
-        if (birthDate != null) {
-            appUser.setBirthDate(birthDate);
         }
     }
 
