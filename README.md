@@ -43,6 +43,8 @@ GRANT ALL ON chat.* TO 'chatuser'@'localhost';
 
 ## Running the application
 
+Before running the application, please make sure your system environment meets the prerequisites described above and have the database configured.
+
 cd into project root
 
 ```shell
