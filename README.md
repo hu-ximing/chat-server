@@ -27,7 +27,7 @@ springdoc.swagger-ui.enabled=true
 
 ## Prerequisites
 
-- MySQL server
+- MySQL 8.0 server
 
 - JRE 17
 

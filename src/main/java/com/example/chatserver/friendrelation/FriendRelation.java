@@ -32,11 +32,25 @@ public class FriendRelation {
 
     private LocalDateTime latestInteractionTime;
 
+    @Column(nullable = false)
+    private Boolean accepted = false;
+
+    @Column(nullable = false)
+    private Boolean rejected = false;
+
+    private String selfIntroduction;
+
+    private String remark;
+
     public FriendRelation(AppUser appUser,
                           AppUser friend,
-                          LocalDateTime latestInteractionTime) {
+                          LocalDateTime latestInteractionTime,
+                          Boolean accepted,
+                          String selfIntroduction) {
         this.appUser = appUser;
         this.friend = friend;
         this.latestInteractionTime = latestInteractionTime;
+        this.accepted = accepted;
+        this.selfIntroduction = selfIntroduction;
     }
 }
