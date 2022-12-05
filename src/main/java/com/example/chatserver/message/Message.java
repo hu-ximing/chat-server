@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-public class Message implements Comparable<Message> {
+public class Message {
     @Id
     @SequenceGenerator(
             name = "message_sequence",
@@ -51,10 +51,5 @@ public class Message implements Comparable<Message> {
         this.timestamp = timestamp;
         this.content = content;
         this.isRead = isRead;
-    }
-
-    @Override
-    public int compareTo(Message o) {
-        return this.getTimestamp().compareTo(o.getTimestamp());
     }
 }

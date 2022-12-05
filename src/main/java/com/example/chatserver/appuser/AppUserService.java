@@ -12,10 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -94,38 +92,5 @@ public class AppUserService implements UserDetailsService {
                 !Objects.equals(lastName, appUser.getLastName())) {
             appUser.setLastName(lastName);
         }
-    }
-
-    public List<AppUserSummary> getFriends() {
-        // TODO: Sort friends by interaction time
-
-        // since @ManyToMany(fetch = FetchType.LAZY) List<AppUser> friends
-        // you need to load the user from database
-        AppUser appUser = getUserById(getLoggedInAppUser().getId());
-        return appUser
-                .getFriends()
-                .stream()
-                .map(f -> new AppUserSummary(
-                        f.getId(),
-                        f.getFirstName(),
-                        f.getLastName(),
-                        f.getDisplayName()))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void addFriendWith(Long friendUserId) {
-        AppUser appUser = getLoggedInAppUser();
-        AppUser friend = getUserById(friendUserId);
-        appUser.getFriends().add(friend);
-        friend.getFriends().add(appUser);
-    }
-
-    @Transactional
-    public void addFriend(Long userId1, Long userId2) {
-        AppUser user1 = getUserById(userId1);
-        AppUser user2 = getUserById(userId2);
-        user1.getFriends().add(user2);
-        user2.getFriends().add(user1);
     }
 }

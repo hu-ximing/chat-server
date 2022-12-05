@@ -28,9 +28,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Modifying
     @Query("UPDATE Message m " +
             "SET m.isRead = true " +
-            "WHERE m.id IN " +
-            "(SELECT m.id FROM m " +
             "WHERE m.sender = :sender " +
-            "AND m.receiver = :receiver)")
+            "AND m.receiver = :receiver")
     void setIsReadToTrueBySenderAndReceiver(AppUser sender, AppUser receiver);
 }

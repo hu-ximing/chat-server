@@ -3,7 +3,6 @@ package com.example.chatserver.message;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -31,7 +30,7 @@ public class MessageController {
      * @param friendUserId id of friend user
      * @return number of messages that have not been read
      */
-    @GetMapping(path = "count")
+    @GetMapping(path = "count-unread")
     public Long countUnreadMessages(@RequestParam Long friendUserId) {
         return messageService.countUnreadMessages(friendUserId);
     }
@@ -41,7 +40,7 @@ public class MessageController {
      *
      * @param request MessageSendRequest object
      */
-    @PutMapping
+    @PostMapping
     public void sendMessageTo(@RequestBody MessageSendRequest request) {
         messageService.sendMessageTo(request);
     }
@@ -54,16 +53,5 @@ public class MessageController {
     @PostMapping(path = "read")
     public void readMessage(@RequestParam Long friendUserId) {
         messageService.readMessage(friendUserId);
-    }
-
-    /**
-     * Get the latest interaction time with the friend.
-     *
-     * @param friendUserId id of friend user
-     * @return The most recent message's timestamp
-     */
-    @GetMapping(path = "last-interaction-time")
-    public LocalDateTime getLastInteractionTime(@RequestParam Long friendUserId) {
-        return messageService.getLastInteractionTime(friendUserId);
     }
 }

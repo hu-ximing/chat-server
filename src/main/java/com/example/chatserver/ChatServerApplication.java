@@ -2,6 +2,7 @@ package com.example.chatserver;
 
 import com.example.chatserver.appuser.AppUser;
 import com.example.chatserver.appuser.AppUserService;
+import com.example.chatserver.friendrelation.FriendRelationService;
 import com.example.chatserver.message.MessageSendRequest;
 import com.example.chatserver.message.MessageService;
 import com.example.chatserver.registration.RegistrationRequest;
@@ -19,6 +20,7 @@ public class ChatServerApplication {
     private final AppUserService appUserService;
     private final MessageService messageService;
     private final RegistrationService registrationService;
+    private final FriendRelationService friendRelationService;
 
     public static void main(String[] args) {
         SpringApplication.run(ChatServerApplication.class, args);
@@ -51,14 +53,22 @@ public class ChatServerApplication {
             AppUser babara = appUserService.getUserById(1L);
             AppUser elka = appUserService.getUserById(2L);
             AppUser tom = appUserService.getUserById(3L);
-            appUserService.addFriend(babara.getId(), tom.getId());
-            appUserService.addFriend(elka.getId(), tom.getId());
-            messageService.createMessage(tom, new MessageSendRequest(
-                    babara.getId(), "first message to babara"
+
+            friendRelationService.addFriend(tom.getId(), babara.getId());
+            friendRelationService.addFriend(tom.getId(), elka.getId());
+
+            messageService.createMessage(elka.getId(), new MessageSendRequest(
+                    tom.getId(), "elka to tom 2-3"
             ));
-            messageService.createMessage(babara, new MessageSendRequest(
-                    tom.getId(), "second message to tom"
+            Thread.sleep(1000);
+            messageService.createMessage(tom.getId(), new MessageSendRequest(
+                    babara.getId(), "tom to babara 3-1"
             ));
+            Thread.sleep(1000);
+            messageService.createMessage(babara.getId(), new MessageSendRequest(
+                    tom.getId(), "babara to tom 1-3"
+            ));
+
         };
     }
 }

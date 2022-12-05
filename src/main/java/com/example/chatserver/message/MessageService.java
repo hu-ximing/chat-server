@@ -2,6 +2,7 @@ package com.example.chatserver.message;
 
 import com.example.chatserver.appuser.AppUser;
 import com.example.chatserver.appuser.AppUserService;
+import com.example.chatserver.friendrelation.FriendRelationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final AppUserService appUserService;
+    private final FriendRelationService friendRelationService;
 
     public List<Message> getMessagesWith(Long friendUserId) {
         AppUser user1 = appUserService.getLoggedInAppUser();
@@ -54,31 +56,31 @@ public class MessageService {
     public void sendMessageTo(MessageSendRequest request) {
         AppUser sender = appUserService.getLoggedInAppUser();
         AppUser receiver = appUserService.getUserById(request.receiverId());
+        LocalDateTime now = LocalDateTime.now();
         Message message = new Message(
                 sender,
                 receiver,
-                LocalDateTime.now(),
+                now,
                 request.content(),
                 false
         );
         messageRepository.save(message);
+        friendRelationService.updateLatestInteractionTime(sender, receiver, now);
     }
 
     @Transactional
-    public void createMessage(AppUser sender, MessageSendRequest request) {
+    public void createMessage(Long senderId, MessageSendRequest request) {
+        AppUser sender = appUserService.getUserById(senderId);
         AppUser receiver = appUserService.getUserById(request.receiverId());
+        LocalDateTime now = LocalDateTime.now();
         Message message = new Message(
                 sender,
                 receiver,
-                LocalDateTime.now(),
+                now,
                 request.content(),
                 false
         );
         messageRepository.save(message);
-    }
-
-    public LocalDateTime getLastInteractionTime(Long friendUserId) {
-        List<Message> messages = getMessagesWith(friendUserId);
-        return messages.get(messages.size() - 1).getTimestamp();
+        friendRelationService.updateLatestInteractionTime(sender, receiver, now);
     }
 }

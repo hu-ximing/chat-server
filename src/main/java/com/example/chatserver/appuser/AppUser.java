@@ -8,10 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Entity
 @Data
@@ -33,16 +31,18 @@ public class AppUser implements UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
-    @Column()
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole = AppUserRole.USER;
 
+    @Column(nullable = false)
     private Boolean locked = false;
 
+    @Column(nullable = false)
     private Boolean enabled = true;
 
     // custom fields
@@ -54,10 +54,6 @@ public class AppUser implements UserDetails {
 
     @Column(nullable = false)
     private String displayName;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<AppUser> friends = new ArrayList<>();
 
     public AppUser(String username,
                    String password,

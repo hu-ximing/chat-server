@@ -13,6 +13,12 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
+    /**
+     * Register a new user
+     *
+     * @param request RegistrationRequest containing info about registration
+     * @return "registration succeed" message if successfully registered
+     */
     @PostMapping
     public String register(@RequestBody RegistrationRequest request) {
         return registrationService.register(request);
