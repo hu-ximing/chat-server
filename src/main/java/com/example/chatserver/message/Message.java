@@ -21,15 +21,14 @@ public class Message {
             strategy = GenerationType.SEQUENCE,
             generator = "message_sequence"
     )
-    @Column(name = "message_id", nullable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sender_user_id")
+    @JoinColumn(name = "sender_user_id", nullable = false)
     private AppUser sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_user_id")
+    @JoinColumn(name = "receiver_user_id", nullable = false)
     private AppUser receiver;
 
     @Column(nullable = false)

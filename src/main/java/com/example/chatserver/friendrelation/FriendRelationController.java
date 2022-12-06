@@ -45,7 +45,7 @@ public class FriendRelationController {
      * @param request information about the request
      */
     @PostMapping(path = "request")
-    public void sendFriendRequest(FriendRelationRequest request) {
+    public void sendFriendRequest(@RequestBody FriendRelationRequest request) {
         friendRelationService.sendFriendRequest(request);
     }
 
@@ -69,18 +69,6 @@ public class FriendRelationController {
     @PostMapping(path = "request/accept")
     public void acceptFriendRequest(Long friendUserId) {
         friendRelationService.acceptFriendRequest(friendUserId);
-    }
-
-    /**
-     * Add friend with the user with id friendUserId.
-     *
-     * @param friendUserId id of the user
-     *                     who the current logged-in user want to be friend with
-     */
-    @Deprecated
-    @PostMapping
-    public void addFriendWith(@RequestParam Long friendUserId) {
-        friendRelationService.addFriendWith(friendUserId);
     }
 
     /**

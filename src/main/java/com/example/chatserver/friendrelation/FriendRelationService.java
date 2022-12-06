@@ -51,6 +51,7 @@ public class FriendRelationService {
     public void sendFriendRequest(FriendRelationRequest request) {
         AppUser appUser = appUserService.getLoggedInAppUser();
         AppUser friend = appUserService.getUserById(request.friendUserId());
+        LocalDateTime now = LocalDateTime.now();
 
         Optional<FriendRelation> friendRelationOptional = friendRelationRepository
                 .findByAppUserAndFriend(appUser, friend);
@@ -61,11 +62,12 @@ public class FriendRelationService {
             FriendRelation relation = friendRelationOptional.get();
             relation.setSelfIntroduction(request.selfIntroduction());
             relation.setRejected(false);
+            relation.setLatestInteractionTime(now);
         } else {
             friendRelationRepository.save(
                     new FriendRelation(appUser,
                             friend,
-                            LocalDateTime.now(),
+                            now,
                             false,
                             request.selfIntroduction())
             );
@@ -95,19 +97,7 @@ public class FriendRelationService {
         friendRelationRepository
                 .deleteAllByAppUserAndFriendAndAcceptedFalse(friend, appUser);
 
-        addFriendWith(friendUserId);
-    }
-
-    @Transactional
-    public void addFriendWith(Long friendUserId) {
-        AppUser appUser = appUserService.getLoggedInAppUser();
-        AppUser friend = appUserService.getUserById(friendUserId);
-        LocalDateTime now = LocalDateTime.now();
-
-        friendRelationRepository.saveAll(List.of(
-                new FriendRelation(appUser, friend, now, true, null),
-                new FriendRelation(friend, appUser, now, true, null)
-        ));
+        addFriend(appUser.getId(), friendUserId);
     }
 
     @Transactional

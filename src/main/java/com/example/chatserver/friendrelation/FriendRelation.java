@@ -25,9 +25,11 @@ public class FriendRelation {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private AppUser appUser;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private AppUser friend;
 
     private LocalDateTime latestInteractionTime;
