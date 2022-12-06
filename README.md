@@ -19,7 +19,6 @@ Edit `resources/application.properties` to change these properties.
 spring.datasource.url=jdbc:mysql://localhost:3306/chat
 spring.datasource.username=chatuser
 spring.datasource.password=1234
-server.port=80
 springdoc.swagger-ui.path=/api
 springdoc.api-docs.enabled=true
 springdoc.swagger-ui.enabled=true
