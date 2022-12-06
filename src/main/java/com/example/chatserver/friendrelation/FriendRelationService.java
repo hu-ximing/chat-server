@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @AllArgsConstructor
@@ -20,8 +21,12 @@ public class FriendRelationService {
     private final FriendRelationRepository friendRelationRepository;
     private final AppUserService appUserService;
 
-    public List<AppUserSummary> mapRelationsToSummaries(List<FriendRelation> relations) {
-        return relations
+    // only return accepted friends
+    public List<AppUserSummary> getFriends() {
+        AppUser appUser = appUserService.getLoggedInAppUser();
+        List<FriendRelation> friendRelations = friendRelationRepository
+                .findByAppUserAndAcceptedTrueOrderByLatestInteractionTimeDesc(appUser);
+        return friendRelations
                 .stream()
                 .map(fr -> new AppUserSummary(
                         fr.getFriend().getId(),
@@ -29,22 +34,32 @@ public class FriendRelationService {
                         fr.getFriend().getLastName(),
                         fr.getFriend().getDisplayName()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    // only return accepted friends
-    public List<AppUserSummary> getFriends() {
+    public List<FriendRelationRequestSummary> getReceivedFriendRequests() {
         AppUser appUser = appUserService.getLoggedInAppUser();
-        List<FriendRelation> relations = friendRelationRepository
-                .findByAppUserAndAcceptedTrueOrderByLatestInteractionTimeDesc(appUser);
-        return mapRelationsToSummaries(relations);
-    }
 
-    public List<AppUserSummary> getReceivedFriendRequests() {
-        AppUser appUser = appUserService.getLoggedInAppUser();
-        List<FriendRelation> relations = friendRelationRepository
+        List<FriendRelation> friendRelations = friendRelationRepository
                 .findReceivedFriendRequests(appUser);
-        return mapRelationsToSummaries(relations);
+
+        List<AppUserSummary> appUserSummaries = friendRelations
+                .stream()
+                .map(fr -> new AppUserSummary(
+                        fr.getAppUser().getId(),
+                        fr.getAppUser().getFirstName(),
+                        fr.getAppUser().getLastName(),
+                        fr.getAppUser().getDisplayName()
+                ))
+                .toList();
+
+        return IntStream
+                .range(0, friendRelations.size())
+                .mapToObj(i -> new FriendRelationRequestSummary(
+                        appUserSummaries.get(i),
+                        friendRelations.get(i).getSelfIntroduction()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Transactional

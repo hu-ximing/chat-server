@@ -93,4 +93,6 @@ public class AppUserService implements UserDetailsService {
             appUser.setLastName(lastName);
         }
     }
+
+    // TODO: Search user by properties
 }

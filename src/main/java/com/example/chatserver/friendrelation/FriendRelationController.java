@@ -32,10 +32,10 @@ public class FriendRelationController {
      * The list is sorted by the request sent time,
      * the request sent most recently comes first.
      *
-     * @return a list of user summaries
+     * @return a list of user summaries and their self introductions
      */
     @GetMapping(path = "request")
-    public List<AppUserSummary> getReceivedFriendRequests() {
+    public List<FriendRelationRequestSummary> getReceivedFriendRequests() {
         return friendRelationService.getReceivedFriendRequests();
     }
 

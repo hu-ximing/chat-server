@@ -18,6 +18,11 @@ public class MessageService {
     private final AppUserService appUserService;
     private final FriendRelationService friendRelationService;
 
+    public boolean checkIsFriendWith(Long AppUserId) {
+        // TODO: Check friend is really a friend, if not throw new FriendRelationNotFoundException
+        return true;
+    }
+
     public List<Message> getMessagesWith(Long friendUserId) {
         AppUser user1 = appUserService.getLoggedInAppUser();
         AppUser user2 = appUserService.getUserById(friendUserId);
@@ -26,6 +31,7 @@ public class MessageService {
     }
 
     public List<MessageSummary> getMessageSummariesWith(Long friendUserId) {
+        checkIsFriendWith(friendUserId);
         return getMessagesWith(friendUserId)
                 .stream()
                 .map(m -> new MessageSummary(m.getId(),
@@ -38,6 +44,7 @@ public class MessageService {
     }
 
     public Long countUnreadMessages(Long friendUserId) {
+        checkIsFriendWith(friendUserId);
         AppUser current = appUserService.getLoggedInAppUser();
         AppUser friend = appUserService.getUserById(friendUserId);
         return messageRepository
@@ -46,6 +53,7 @@ public class MessageService {
 
     @Transactional
     public void readMessage(Long friendUserId) {
+        checkIsFriendWith(friendUserId);
         AppUser current = appUserService.getLoggedInAppUser();
         AppUser friend = appUserService.getUserById(friendUserId);
         messageRepository
@@ -54,6 +62,7 @@ public class MessageService {
 
     @Transactional
     public void sendMessageTo(MessageSendRequest request) {
+        checkIsFriendWith(request.receiverId());
         AppUser sender = appUserService.getLoggedInAppUser();
         AppUser receiver = appUserService.getUserById(request.receiverId());
         LocalDateTime now = LocalDateTime.now();
@@ -70,6 +79,7 @@ public class MessageService {
 
     @Transactional
     public void createMessage(Long senderId, MessageSendRequest request) {
+        checkIsFriendWith(request.receiverId());
         AppUser sender = appUserService.getUserById(senderId);
         AppUser receiver = appUserService.getUserById(request.receiverId());
         LocalDateTime now = LocalDateTime.now();
