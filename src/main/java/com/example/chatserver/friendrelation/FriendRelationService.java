@@ -37,6 +37,22 @@ public class FriendRelationService {
                 .toList();
     }
 
+    public void checkIsFriendWith(Long friendUserId) {
+        AppUser appUser = appUserService.getLoggedInAppUser();
+        AppUser friend = appUserService.getUserById(friendUserId);
+        Optional<FriendRelation> relationOptional = friendRelationRepository
+                .findByAppUserAndFriend(appUser, friend);
+        boolean isFriend;
+        if (relationOptional.isEmpty()) {
+            isFriend = false;
+        } else {
+            isFriend = relationOptional.get().getAccepted();
+        }
+        if (!isFriend) {
+            throw new FriendRelationNotFoundException(appUser.getId(), friendUserId);
+        }
+    }
+
     public List<FriendRelationRequestSummary> getReceivedFriendRequests() {
         AppUser appUser = appUserService.getLoggedInAppUser();
 
