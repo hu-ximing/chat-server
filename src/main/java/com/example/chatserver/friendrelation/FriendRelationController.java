@@ -15,7 +15,7 @@ public class FriendRelationController {
     private final FriendRelationService friendRelationService;
 
     /**
-     * Get a list of users' summaries that are friends of the current logged-in user
+     * Get a list of users' summaries that are friends of the current logged-in user.
      * The list is sorted by their last interaction time,
      * the friend interacted most recently comes first.
      *
@@ -40,7 +40,7 @@ public class FriendRelationController {
     }
 
     /**
-     * Send a request to a user
+     * Send a request to a user.
      *
      * @param request information about the request
      */
@@ -62,7 +62,7 @@ public class FriendRelationController {
 
     /**
      * Accept a user's friend request.
-     * Accepted requests won't be included with getting the list of received requests.
+     * Accepted requests won't be included when getting the list of received requests.
      *
      * @param friendUserId user id of request
      */

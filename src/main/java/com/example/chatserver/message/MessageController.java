@@ -13,8 +13,8 @@ public class MessageController {
     private final MessageService messageService;
 
     /**
-     * Get message summaries by friendUserId
-     * sorted by timestamp, with the latest message at the end of the list
+     * Get a list of message summary by friendUserId.
+     * The list is sorted by the message's timestamp from earliest to latest.
      *
      * @param friendUserId id of friend user
      * @return a list of message summaries
@@ -25,7 +25,7 @@ public class MessageController {
     }
 
     /**
-     * Count number of messages that have not been read
+     * Count number of messages that have not been read.
      *
      * @param friendUserId id of friend user
      * @return number of messages that have not been read
