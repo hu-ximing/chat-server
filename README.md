@@ -4,6 +4,8 @@
 
 Backend server for a chat app.
 
+Run the program on localhost and visit `http://localhost:8080/api` to see Rest API documentation.
+
 ## Frontend
 
 - https://github.com/Zheng-August/html
@@ -67,3 +69,38 @@ where `port-number` equals to the same port of the frontend webpage.
 ```
 
 Packaged jar file will be located under `chat-server/target/`.
+
+## Deploying behind Nginx reverse proxy
+
+Spring Boot application default listens on port 8080, and in this application, all APIs have url starting with `/api`.
+
+In this case, we want all requests to `http://server/api/` to be forwarded to the same machine but a different port `http://server:8080/api/`.
+
+1. Edit the `/etc/nginx/nginx.conf` file and add the following settings to the server block that should provide the reverse proxy:
+   
+   ```nginx
+   location /api/ {
+      proxy_pass http://localhost:8080;
+      proxy_set_header Host               $host;
+      proxy_set_header X-Real-IP          $remote_addr;
+      proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Host   $host;
+      proxy_set_header X-Forwarded-Server $host;
+      proxy_set_header X-Forwarded-Port   $server_port;
+      proxy_set_header X-Forwarded-Proto  $scheme;
+   }
+   ```
+
+2. If nginx is running on RHEL based distributions, set the `httpd_can_network_connect` SELinux boolean parameter to `1` to configure that SELinux allows NGINX to forward traffic:
+   
+   [Learn more](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/deploying_web_servers_and_reverse_proxies/setting-up-and-configuring-nginx_deploying-web-servers-and-reverse-proxies#configuring-nginx-as-a-reverse-proxy-for-the-http-traffic_setting-up-and-configuring-nginx)
+   
+   ```shell
+   setsebool -P httpd_can_network_connect 1
+   ```
+
+3. Restart the `nginx` service:
+   
+   ```shell
+   systemctl restart nginx
+   ```
