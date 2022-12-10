@@ -4,27 +4,10 @@
 
 Backend server for a chat app.
 
-Run the program on localhost and visit `http://localhost:8080/api` to see Rest API documentation.
-
 ## Frontend
 
 - https://github.com/Zheng-August/html
 - https://github.com/LJC0414/GhostChat
-
-## Configuring properties
-
-Some important configurations are listed below.
-
-Edit `resources/application.properties` to change these properties.
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/chat
-spring.datasource.username=chatuser
-spring.datasource.password=1234
-springdoc.swagger-ui.path=/api
-springdoc.api-docs.enabled=true
-springdoc.swagger-ui.enabled=true
-```
 
 ## Prerequisites
 
@@ -37,9 +20,9 @@ springdoc.swagger-ui.enabled=true
 Login to MySQL as root
 
 ```mysql
-CREATE DATABASE chat;
-CREATE USER 'chatuser'@'localhost' IDENTIFIED BY '1234';
-GRANT ALL ON chat.* TO 'chatuser'@'localhost';
+CREATE DATABASE ghost_chat;
+CREATE USER 'ghost_chat_user'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL ON ghost_chat.* TO 'ghost_chat_user'@'localhost';
 ```
 
 ## Running the application
@@ -54,18 +37,16 @@ cd into project root
 
 It can take a while when you run it for the first time, since maven would resolve and download dependencies.
 
-Alternatively, run the program using jar file
+Alternatively, run the program using jar file:
 
 ```shell
-java -jar chat-server-xxx.jar --server.port=<port-number>
+java -jar chat-server-xxx.jar
 ```
-
-where `port-number` equals to the same port of the frontend webpage.
 
 ## Building from source
 
 ```shell
-./mvnw clean install
+./mvnw install
 ```
 
 Packaged jar file will be located under `chat-server/target/`.
@@ -104,3 +85,7 @@ In this case, we want all requests to `http://server/api/` to be forwarded to th
    ```shell
    systemctl restart nginx
    ```
+
+## Rest API
+
+Run the program with the frontend and reverse proxy set up. Visit `http://server/api` to read Rest API documentation.

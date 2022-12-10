@@ -23,12 +23,12 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/login")
-                        .loginPage("/login.html")
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
-                        .logoutSuccessUrl("/login.html")
+                        .logoutSuccessUrl("/login")
                         .permitAll()
                 );
         return http.build();
