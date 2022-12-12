@@ -23,4 +23,6 @@ public interface FriendRelationRepository extends JpaRepository<FriendRelation, 
     Optional<FriendRelation> findByAppUserAndFriend(AppUser appUser, AppUser friend);
 
     void deleteAllByAppUserAndFriendAndAcceptedFalse(AppUser appUser, AppUser friend);
+
+    void deleteAllByAppUserAndFriend(AppUser appUser, AppUser friend);
 }

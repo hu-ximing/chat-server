@@ -168,4 +168,15 @@ public class FriendRelationService {
                         new FriendRelationNotFoundException(user2.getId(), user1.getId()))
                 .setLatestInteractionTime(localDateTime);
     }
+
+    @Transactional
+    public void deleteFriend(Long friendUserId) {
+        AppUser appUser = appUserService.getLoggedInAppUser();
+        AppUser friend = appUserService.getUserById(friendUserId);
+
+        friendRelationRepository
+                .deleteAllByAppUserAndFriend(appUser, friend);
+        friendRelationRepository
+                .deleteAllByAppUserAndFriend(friend, appUser);
+    }
 }

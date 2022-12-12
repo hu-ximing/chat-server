@@ -3,6 +3,8 @@ package com.example.chatserver.appuser;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/v1/user")
 @AllArgsConstructor
@@ -44,5 +46,42 @@ public class AppUserController {
                               @RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String lastName) {
         appUserService.updateAppUser(username, password, displayName, firstName, lastName);
+    }
+
+    /**
+     * Search a single user by id.
+     * If user with id exists, return summary of that user;
+     * if user with id does not exist, return null.
+     *
+     * @param appUserId id of the user
+     * @return appUserSummary or null
+     */
+    @GetMapping(path = "search/id")
+    public AppUserSummary searchUserById(Long appUserId) {
+        return appUserService.searchUserById(appUserId);
+    }
+
+    /**
+     * Search a single user by username.
+     * If user with username exists, return summary of that user;
+     * if user with username does not exist, return null.
+     *
+     * @param username username of the user
+     * @return appUserSummary or null
+     */
+    @GetMapping(path = "search/username")
+    public AppUserSummary searchUserByUsername(String username) {
+        return appUserService.searchUserByUsername(username);
+    }
+
+    /**
+     * Search a list of user by display name (regular expression).
+     *
+     * @param displayNameRegex display name (regular expression) of the users.
+     * @return a list of appUserSummary
+     */
+    @GetMapping(path = "search/display-name")
+    public List<AppUserSummary> searchUserByDisplayNameRegex(String displayNameRegex) {
+        return appUserService.searchUserByDisplayNameRegex(displayNameRegex);
     }
 }

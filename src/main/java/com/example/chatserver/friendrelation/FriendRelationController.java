@@ -81,4 +81,16 @@ public class FriendRelationController {
     public LocalDateTime getLatestInteractionTime(@RequestParam Long friendUserId) {
         return friendRelationService.getLatestInteractionTime(friendUserId);
     }
+
+    /**
+     * Delete a friend from the logged-in user's friend list.
+     * This deletion is mutual, meaning the logged-in user
+     * will also be removed from the friend's friend list.
+     *
+     * @param friendUserId id of the friend user
+     */
+    @DeleteMapping
+    public void deleteFriend(Long friendUserId) {
+        friendRelationService.deleteFriend(friendUserId);
+    }
 }

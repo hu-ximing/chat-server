@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -34,9 +35,9 @@ public class AppUserService implements UserDetailsService {
         return (AppUser) auth.getPrincipal();
     }
 
-    public AppUser getUserById(Long userId) {
-        return appUserRepository.findById(userId).orElseThrow(
-                () -> new AppUserNotFoundException(userId)
+    public AppUser getUserById(Long appUserId) {
+        return appUserRepository.findById(appUserId).orElseThrow(
+                () -> new AppUserNotFoundException(appUserId)
         );
     }
 
@@ -94,5 +95,31 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    // TODO: Search user by properties
+    public AppUserSummary appUserToAppUserSummary(AppUser appUser) {
+        return new AppUserSummary(
+                appUser.getId(),
+                appUser.getFirstName(),
+                appUser.getLastName(),
+                appUser.getDisplayName()
+        );
+    }
+
+    // Search user by properties
+    public AppUserSummary searchUserById(Long appUserId) {
+        Optional<AppUser> byId = appUserRepository.findById(appUserId);
+        return byId.map(this::appUserToAppUserSummary).orElse(null);
+    }
+
+    public AppUserSummary searchUserByUsername(String username) {
+        Optional<AppUser> byUsername = appUserRepository.findByUsername(username);
+        return byUsername.map(this::appUserToAppUserSummary).orElse(null);
+    }
+
+    public List<AppUserSummary> searchUserByDisplayNameRegex(String displayNameRegex) {
+        return appUserRepository
+                .findByDisplayNameRegex(displayNameRegex)
+                .stream()
+                .map(this::appUserToAppUserSummary)
+                .toList();
+    }
 }
