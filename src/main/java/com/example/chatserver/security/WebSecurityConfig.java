@@ -24,11 +24,11 @@ public class WebSecurityConfig {
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/login")
                         .loginPage("/login")
+                        .defaultSuccessUrl("/chat", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
-                        .logoutSuccessUrl("/login")
                         .permitAll()
                 );
         return http.build();
