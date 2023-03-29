@@ -1,6 +1,6 @@
 package com.example.chatserver.appuser;
 
-public record AppUserSummary(
+public record AppUserDTO(
         Long id,
         String firstName,
         String lastName,

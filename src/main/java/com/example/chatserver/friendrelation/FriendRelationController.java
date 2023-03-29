@@ -1,6 +1,6 @@
 package com.example.chatserver.friendrelation;
 
-import com.example.chatserver.appuser.AppUserSummary;
+import com.example.chatserver.appuser.AppUserDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public class FriendRelationController {
      * @return a list of user summaries
      */
     @GetMapping
-    public List<AppUserSummary> getFriends() {
+    public List<AppUserDTO> getFriends() {
         return friendRelationService.getFriends();
     }
 

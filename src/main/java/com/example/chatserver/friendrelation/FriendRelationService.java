@@ -2,7 +2,7 @@ package com.example.chatserver.friendrelation;
 
 import com.example.chatserver.appuser.AppUser;
 import com.example.chatserver.appuser.AppUserService;
-import com.example.chatserver.appuser.AppUserSummary;
+import com.example.chatserver.appuser.AppUserDTO;
 import com.example.chatserver.friendrelation.exception.FriendRelationNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ public class FriendRelationService {
     private final AppUserService appUserService;
 
     // only return accepted friends
-    public List<AppUserSummary> getFriends() {
+    public List<AppUserDTO> getFriends() {
         AppUser appUser = appUserService.getLoggedInAppUser();
         List<FriendRelation> friendRelations = friendRelationRepository
                 .findByAppUserAndAcceptedTrueOrderByLatestInteractionTimeDesc(appUser);
         return friendRelations
                 .stream()
-                .map(fr -> new AppUserSummary(
+                .map(fr -> new AppUserDTO(
                         fr.getFriend().getId(),
                         fr.getFriend().getFirstName(),
                         fr.getFriend().getLastName(),
@@ -59,9 +59,9 @@ public class FriendRelationService {
         List<FriendRelation> friendRelations = friendRelationRepository
                 .findReceivedFriendRequests(appUser);
 
-        List<AppUserSummary> appUserSummaries = friendRelations
+        List<AppUserDTO> appUserSummaries = friendRelations
                 .stream()
-                .map(fr -> new AppUserSummary(
+                .map(fr -> new AppUserDTO(
                         fr.getAppUser().getId(),
                         fr.getAppUser().getFirstName(),
                         fr.getAppUser().getLastName(),

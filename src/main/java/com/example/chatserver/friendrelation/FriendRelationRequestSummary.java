@@ -1,9 +1,9 @@
 package com.example.chatserver.friendrelation;
 
-import com.example.chatserver.appuser.AppUserSummary;
+import com.example.chatserver.appuser.AppUserDTO;
 
 public record FriendRelationRequestSummary(
-        AppUserSummary appUserSummary,
+        AppUserDTO appUserDTO,
         String selfIntroduction
 ) {
 }

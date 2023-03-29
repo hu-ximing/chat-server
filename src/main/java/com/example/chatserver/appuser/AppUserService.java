@@ -95,8 +95,8 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    public AppUserSummary appUserToAppUserSummary(AppUser appUser) {
-        return new AppUserSummary(
+    public AppUserDTO appUserToAppUserSummary(AppUser appUser) {
+        return new AppUserDTO(
                 appUser.getId(),
                 appUser.getFirstName(),
                 appUser.getLastName(),
@@ -105,17 +105,17 @@ public class AppUserService implements UserDetailsService {
     }
 
     // Search user by properties
-    public AppUserSummary searchUserById(Long appUserId) {
+    public AppUserDTO searchUserById(Long appUserId) {
         Optional<AppUser> byId = appUserRepository.findById(appUserId);
         return byId.map(this::appUserToAppUserSummary).orElse(null);
     }
 
-    public AppUserSummary searchUserByUsername(String username) {
+    public AppUserDTO searchUserByUsername(String username) {
         Optional<AppUser> byUsername = appUserRepository.findByUsername(username);
         return byUsername.map(this::appUserToAppUserSummary).orElse(null);
     }
 
-    public List<AppUserSummary> searchUserByDisplayNameRegex(String displayNameRegex) {
+    public List<AppUserDTO> searchUserByDisplayNameRegex(String displayNameRegex) {
         return appUserRepository
                 .findByDisplayNameRegex(displayNameRegex)
                 .stream()

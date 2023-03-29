@@ -57,7 +57,7 @@ public class AppUserController {
      * @return appUserSummary or null
      */
     @GetMapping(path = "search/id")
-    public AppUserSummary searchUserById(Long appUserId) {
+    public AppUserDTO searchUserById(Long appUserId) {
         return appUserService.searchUserById(appUserId);
     }
 
@@ -70,7 +70,7 @@ public class AppUserController {
      * @return appUserSummary or null
      */
     @GetMapping(path = "search/username")
-    public AppUserSummary searchUserByUsername(String username) {
+    public AppUserDTO searchUserByUsername(String username) {
         return appUserService.searchUserByUsername(username);
     }
 
@@ -81,7 +81,7 @@ public class AppUserController {
      * @return a list of appUserSummary
      */
     @GetMapping(path = "search/display-name")
-    public List<AppUserSummary> searchUserByDisplayNameRegex(String displayNameRegex) {
+    public List<AppUserDTO> searchUserByDisplayNameRegex(String displayNameRegex) {
         return appUserService.searchUserByDisplayNameRegex(displayNameRegex);
     }
 }
